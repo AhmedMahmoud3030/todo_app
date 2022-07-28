@@ -53,7 +53,7 @@ class ScheduleView extends StatelessWidget {
                                         cubit.firstDayOfWeek
                                             .isAtSameMomentAs(DateTime.now())
                                     ? ColorManger.lightGrey
-                                    : ColorManger.grey2),
+                                    : ColorManger.white),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
