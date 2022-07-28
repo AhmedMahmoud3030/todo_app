@@ -125,6 +125,23 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                     child: ElevatedButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.resolveWith<Color>(
+                            (states) => Colors.transparent),
+                        surfaceTintColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                                (states) => Colors.transparent),
+                        shadowColor: MaterialStateProperty.resolveWith<Color>(
+                            (states) => Colors.transparent),
+                        foregroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                                (states) => Colors.transparent),
+                        elevation: MaterialStateProperty.resolveWith<double>(
+                            (states) => 0),
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                                (states) => Colors.transparent),
+                      ),
                       onPressed: () async {
                         Navigator.pushNamed(context, Routes.addTaskRoute);
                       },

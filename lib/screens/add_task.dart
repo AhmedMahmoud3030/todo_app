@@ -286,11 +286,31 @@ class AddTask extends StatelessWidget {
                             boxShadow: <BoxShadow>[
                               BoxShadow(
                                   color: Color.fromRGBO(
-                                      0, 0, 0, 0.57), //shadow for button
+                                      0, 0, 0, 0), //shadow for button
                                   blurRadius: 5) //blur radius of shadow
                             ],
                           ),
                           child: ElevatedButton(
+                              style: ButtonStyle(
+                                overlayColor:
+                                    MaterialStateProperty.resolveWith<Color>(
+                                        (states) => Colors.transparent),
+                                surfaceTintColor:
+                                    MaterialStateProperty.resolveWith<Color>(
+                                        (states) => Colors.transparent),
+                                shadowColor:
+                                    MaterialStateProperty.resolveWith<Color>(
+                                        (states) => Colors.transparent),
+                                foregroundColor:
+                                    MaterialStateProperty.resolveWith<Color>(
+                                        (states) => Colors.transparent),
+                                elevation:
+                                    MaterialStateProperty.resolveWith<double>(
+                                        (states) => 0),
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith<Color>(
+                                        (states) => Colors.transparent),
+                              ),
                               onPressed: () async {
                                 if (formKey.currentState!.validate()) {
                                   cubit.addData();

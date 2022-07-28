@@ -54,7 +54,7 @@ ThemeData getApplicationTheme() {
         ),
         surfaceTintColor: Colors.transparent,
         onPrimary: Colors.transparent,
-        elevation: 0,
+        elevation: 20,
         primary: Colors.transparent,
         onSurface: Colors.transparent,
         shadowColor: Colors.transparent,
