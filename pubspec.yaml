@@ -13,12 +13,17 @@ dependencies:
     sdk: flutter 
   
   cupertino_icons: ^1.0.2
-  sqflite: ^2.0.3
   
+  sqflite: ^2.0.3
   conditional_builder_null_safety: ^0.0.6
   flutter_bloc: ^8.0.1
   intl: ^0.17.0
   device_calendar: ^4.2.0
+  timezone: ^0.8.0 
+  flutter_native_timezone: ^2.0.0
+  alarm_calendar: ^0.0.5
+  equatable: ^2.0.3
+  add_2_calendar: ^2.1.2
 
 dev_dependencies:
   flutter_test:

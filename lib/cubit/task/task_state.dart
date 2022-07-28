@@ -43,3 +43,5 @@ class IsFavoriteRefreshState extends TaskState {}
 
 //?changeDateView
 class ChangeDateRefreshState extends TaskState {}
+
+class AddToCalendarInProgress extends TaskState {}

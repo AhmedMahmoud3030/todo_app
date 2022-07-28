@@ -23,6 +23,7 @@ class AddTask extends StatelessWidget {
       },
       builder: (context, state) {
         var cubit = TaskCubit.get(context);
+        FocusNode focusNode = FocusNode();
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -81,6 +82,7 @@ class AddTask extends StatelessWidget {
                       hint: '7/23/2022',
                       icon: Icons.keyboard_arrow_down_sharp,
                       onPressed: () {
+                        focusNode.unfocus();
                         showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
@@ -106,25 +108,30 @@ class AddTask extends StatelessWidget {
                                       .textTheme
                                       .headlineSmall),
                               SizedBox(height: AppPadding.p16),
-                              CustomTextFormField(
-                                onSaved: (s) {},
-                                validator: (String? s) {
-                                  if (s!.isEmpty) return "Can'\t be empty";
-                                  return null;
+                              GestureDetector(
+                                onTap: () {
+                                  focusNode.unfocus();
                                 },
-                                textInputType: TextInputType.datetime,
-                                textEditingController: cubit.startTime,
-                                hint: '11:00 AM',
-                                icon: Icons.timelapse,
-                                onPressed: () {
-                                  showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-                                  ).then((value) {
-                                    return cubit.startTime.text =
-                                        value!.format(context);
-                                  });
-                                },
+                                child: CustomTextFormField(
+                                  onSaved: (s) {},
+                                  validator: (String? s) {
+                                    if (s!.isEmpty) return "Can'\t be empty";
+                                    return null;
+                                  },
+                                  textInputType: TextInputType.datetime,
+                                  textEditingController: cubit.startTime,
+                                  hint: '11:00 AM',
+                                  icon: Icons.timelapse,
+                                  onPressed: () {
+                                    showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.now(),
+                                    ).then((value) {
+                                      return cubit.startTime.text =
+                                          value!.format(context);
+                                    });
+                                  },
+                                ),
                               ),
                             ],
                           ),
@@ -143,9 +150,13 @@ class AddTask extends StatelessWidget {
                                 hint: '12:00 PM',
                                 icon: Icons.timelapse,
                                 onPressed: () {
+                                  focusNode.unfocus();
                                   showTimePicker(
                                     context: context,
-                                    initialTime: TimeOfDay.now(),
+                                    initialTime: TimeOfDay(
+                                      hour: TimeOfDay.now().hour + 1,
+                                      minute: TimeOfDay.now().minute,
+                                    ),
                                   ).then((value) {
                                     return cubit.endTime.text =
                                         value!.format(context);
