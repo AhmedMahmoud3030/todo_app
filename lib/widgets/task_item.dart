@@ -65,7 +65,7 @@ class TaskItem extends StatelessWidget {
                                             AppStrings.remove_task_forever,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .displayMedium),
+                                                .headlineMedium),
                                       ),
                                     ),
                                   );
@@ -106,7 +106,7 @@ class TaskItem extends StatelessWidget {
                                           : AppStrings.remove_task_favorite,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .displayMedium),
+                                          .headlineMedium),
                                 ),
                               ),
                             ),
@@ -124,7 +124,7 @@ class TaskItem extends StatelessWidget {
                                           : AppStrings.un_check_task,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .displayMedium),
+                                          .headlineMedium),
                                 ),
                               ),
                             ),

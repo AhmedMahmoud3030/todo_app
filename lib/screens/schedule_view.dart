@@ -167,7 +167,7 @@ class ScheduleView extends StatelessWidget {
                                             : AppStrings.un_check_task,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .displayMedium),
+                                            .headlineMedium),
                                   ),
                                 ),
                               ),
