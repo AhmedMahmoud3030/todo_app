@@ -62,6 +62,10 @@ ThemeData getApplicationTheme() {
         color: ColorManger.white,
         fontSize: FontSize.s18,
       ),
+      displayLarge: getRegularStyle(
+        color: ColorManger.white,
+        fontSize: FontSize.s18,
+      ),
       headlineSmall: getRegularStyle(
         color: ColorManger.black,
         fontSize: FontSize.s16,
@@ -70,9 +74,9 @@ ThemeData getApplicationTheme() {
         color: ColorManger.darkGrey,
         fontSize: FontSize.s18,
       ),
-      displayMedium: getRegularStyle(
+      displayMedium: getSemiBoldStyle(
         color: ColorManger.black,
-        fontSize: FontSize.s20,
+        fontSize: FontSize.s18,
       ),
     ),
 

@@ -18,6 +18,7 @@ dependencies:
   conditional_builder_null_safety: ^0.0.6
   flutter_bloc: ^8.0.1
   intl: ^0.17.0
+  device_calendar: ^4.2.0
 
 dev_dependencies:
   flutter_test:

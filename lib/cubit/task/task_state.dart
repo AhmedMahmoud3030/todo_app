@@ -40,3 +40,6 @@ class IsCheckRefreshState extends TaskState {}
 
 //?isFavoriteState
 class IsFavoriteRefreshState extends TaskState {}
+
+//?changeDateView
+class ChangeDateRefreshState extends TaskState {}

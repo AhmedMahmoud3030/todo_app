@@ -16,7 +16,7 @@ class ScheduleView extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = TaskCubit.get(context);
-        cubit.getFirstDayOfWeek();
+        cubit.generateDays();
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -41,38 +41,126 @@ class ScheduleView extends StatelessWidget {
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     physics: BouncingScrollPhysics(),
-                    itemCount: 7,
+                    itemCount: cubit.days.length,
                     itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.all(AppPadding.p4),
                       child: Container(
                         width: MediaQuery.of(context).size.width / 8,
                         decoration: BoxDecoration(
+                            border: Border.all(
+                              color: cubit.days[index] == cubit.selectedDay
+                                  ? ColorManger.primary
+                                  : ColorManger.white,
+                            ),
                             borderRadius: BorderRadius.circular(AppSize.s12),
-                            color:
-                                cubit.firstDayOfWeek.isAfter(DateTime.now()) ||
-                                        cubit.firstDayOfWeek
-                                            .isAtSameMomentAs(DateTime.now())
-                                    ? ColorManger.lightGrey
-                                    : ColorManger.white),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              DateFormat.E()
-                                  .format(cubit.firstDayOfWeek
-                                      .add(Duration(days: index)))
-                                  .toString(),
-                              style: Theme.of(context).textTheme.headlineMedium,
-                            ),
-                            Text(
-                              DateFormat.d()
-                                  .format(cubit.firstDayOfWeek
-                                      .add(Duration(days: index)))
-                                  .toString(),
-                              style: Theme.of(context).textTheme.headlineMedium,
-                            ),
-                          ],
+                            color: DateFormat.yMd().format(cubit.days[index]) ==
+                                    DateFormat.yMd().format(cubit.now)
+                                ? ColorManger.primary
+                                : ColorManger.white),
+                        child: GestureDetector(
+                          onTap: () {
+                            cubit.getTasksByDay(index);
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                DateFormat.E()
+                                    .format(
+                                      cubit.firstDayOfWeek.add(
+                                        Duration(days: index),
+                                      ),
+                                    )
+                                    .toString(),
+                                style: DateFormat.yMd()
+                                            .format(cubit.days[index]) ==
+                                        DateFormat.yMd().format(cubit.now)
+                                    ? Theme.of(context).textTheme.headlineMedium
+                                    : Theme.of(context).textTheme.displayMedium,
+                              ),
+                              Text(
+                                DateFormat.d()
+                                    .format(cubit.firstDayOfWeek
+                                        .add(Duration(days: index)))
+                                    .toString(),
+                                style: DateFormat.yMd()
+                                            .format(cubit.days[index]) ==
+                                        DateFormat.yMd().format(cubit.now)
+                                    ? Theme.of(context).textTheme.headlineMedium
+                                    : Theme.of(context).textTheme.displayMedium,
+                              ),
+                            ],
+                          ),
                         ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(AppPadding.p12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        DateFormat.EEEE().format(cubit.selectedDay),
+                        style: Theme.of(context).textTheme.displayMedium,
+                      ),
+                      Text(
+                        DateFormat.yMMMd().format(cubit.selectedDay),
+                        style: Theme.of(context).textTheme.displayMedium,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    itemCount: cubit.tasksByDays.length,
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.all(AppPadding.p12),
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppPadding.p12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    cubit.tasksByDays[index].startTime!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium,
+                                  ),
+                                  Text(
+                                    cubit.tasksByDays[index].title!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displayLarge,
+                                  ),
+                                ],
+                              ),
+                              cubit.tasksByDays[index].isCompleted
+                                  ? Icon(
+                                      size: AppSize.s30,
+                                      Icons.check_circle,
+                                      color: ColorManger.white,
+                                    )
+                                  : Icon(
+                                      size: AppSize.s30,
+                                      Icons.circle_outlined,
+                                      color: ColorManger.white,
+                                    )
+                            ],
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.circular(AppSize.s12)),
+                        height: AppSize.s80,
                       ),
                     ),
                   ),

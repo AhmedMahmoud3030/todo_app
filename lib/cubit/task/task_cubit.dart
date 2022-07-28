@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/shared/network/sql_helper.dart';
@@ -24,14 +25,37 @@ class TaskCubit extends Cubit<TaskState> {
   var remind = 'remind_2';
   var repeat = 'repeat_2';
   DateTime firstDayOfWeek = DateTime(2022);
-  void getFirstDayOfWeek() {
-    DateTime now = DateTime.now();
+  DateTime selectedDay = DateTime(2022);
+  DateTime now = DateTime.now();
+  List<DateTime> days = [];
+  List<TaskModel> tasks = [];
+  List<TaskModel> tasksByDays = [];
+
+  List<Color> colors = [];
+
+  void generateDays() async {
     int currentDay = now.weekday;
     firstDayOfWeek = now.subtract(Duration(days: currentDay));
+
+    days = [];
+    for (var i = 0; i < 7; i++) {
+      days.insert(i, firstDayOfWeek.add(Duration(days: i, seconds: i)));
+    }
+
+    print('firstDayOfWeek${firstDayOfWeek}');
+    print('selectedDay${selectedDay}');
+    print('now${now}');
   }
 
-  List<TaskModel> tasks = [];
-  List<Color> colors = [];
+  void getTasksByDay(int index) {
+    selectedDay = days[index];
+    tasksByDays = [];
+    tasksByDays = tasks
+        .where(
+            (element) => element.date == DateFormat.yMd().format(days[index]))
+        .toList();
+    emit(ChangeDateRefreshState());
+  }
 
   void addData() async {
     emit(CreateTaskLoadingState());
