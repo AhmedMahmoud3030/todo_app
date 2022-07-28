@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -263,18 +265,45 @@ class AddTask extends StatelessWidget {
                         cubit.repeat = value;
                       },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(AppPadding.p12),
-                      child: SizedBox(
-                          width: double.infinity,
+                    SizedBox(
+                      height: AppSize.s18,
+                    ),
+                    Container(
+                        padding: const EdgeInsets.all(AppPadding.p12),
+                        width: double.infinity,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                cubit.colors[Random().nextInt(100)],
+                                cubit.colors[Random().nextInt(100)],
+                                cubit.colors[Random().nextInt(100)],
+
+                                //add more colors
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Color.fromRGBO(
+                                      0, 0, 0, 0.57), //shadow for button
+                                  blurRadius: 5) //blur radius of shadow
+                            ],
+                          ),
                           child: ElevatedButton(
                               onPressed: () async {
-                                cubit.addData();
                                 if (formKey.currentState!.validate()) {
+                                  cubit.addData();
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                    SnackBar(
+                                      backgroundColor: ColorManger.lightBlack,
                                       duration: Duration(seconds: 1),
-                                      content: Text('Processing Data'),
+                                      content: Text(
+                                        'Processing Data',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium,
+                                      ),
                                     ),
                                   );
                                   Navigator.pop(context);
@@ -282,9 +311,14 @@ class AddTask extends StatelessWidget {
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      backgroundColor: ColorManger.errorLight,
+                                      backgroundColor: ColorManger.lightBlack,
                                       duration: Duration(seconds: 1),
-                                      content: Text('Please Fill Task Details'),
+                                      content: Text(
+                                        'Please Fill Task Details',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium,
+                                      ),
                                     ),
                                   );
                                 }
@@ -293,8 +327,8 @@ class AddTask extends StatelessWidget {
                                 'Create a Task',
                                 style:
                                     Theme.of(context).textTheme.headlineMedium,
-                              ))),
-                    )
+                              )),
+                        ))
                   ],
                 ),
               ),

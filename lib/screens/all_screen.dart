@@ -9,12 +9,15 @@ import '../resources/values_manager.dart';
 
 class AllScreen extends StatelessWidget {
   final TaskCubit cubit;
-  const AllScreen({Key? key, required this.cubit}) : super(key: key);
+  AllScreen({Key? key, required this.cubit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var items = cubit.tasks;
 
-    return TaskItem(cubit: cubit, items: items);
+    return TaskItem(
+      cubit: cubit,
+      items: items,
+    );
   }
 }

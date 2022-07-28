@@ -37,7 +37,14 @@ ThemeData getApplicationTheme() {
         color: ColorManger.black,
       ),
     ),
-
+    buttonTheme: ButtonThemeData(
+      focusColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      disabledColor: Colors.transparent,
+      buttonColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+    ),
     //?elevated theme
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -45,7 +52,12 @@ ThemeData getApplicationTheme() {
           color: ColorManger.white,
           fontSize: FontSize.s18,
         ),
-        primary: ColorManger.primary,
+        surfaceTintColor: Colors.transparent,
+        onPrimary: Colors.transparent,
+        elevation: 0,
+        primary: Colors.transparent,
+        onSurface: Colors.transparent,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSize.s10),
         ),

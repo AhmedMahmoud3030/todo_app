@@ -17,22 +17,23 @@ class ColorManger {
   static Color grey2 = Color.fromARGB(255, 209, 207, 207);
   static Color white = const Color(0xffffffff);
   static Color black = const Color(0xFF000000);
+  static Color lightBlack = Color.fromARGB(255, 42, 40, 40);
   static Color error = const Color(0xffe61f34);
   static Color errorLight = const Color(0xFFF06774);
 
   static List<Color> taskColors = [
-    Colors.blueAccent.shade200,
-    Colors.amberAccent.shade200,
-    Colors.brown.shade200,
-    Colors.cyanAccent.shade200,
-    Colors.deepOrangeAccent.shade200,
-    Colors.deepPurpleAccent.shade200,
-    Colors.greenAccent.shade200,
-    Colors.indigoAccent.shade200,
-    Colors.limeAccent.shade200,
-    Colors.pinkAccent.shade200,
-    Colors.redAccent.shade200,
-    Colors.tealAccent.shade200,
-    Colors.yellowAccent.shade200,
+    Colors.blueAccent.shade100,
+    Colors.amberAccent.shade100,
+    Colors.brown.shade100,
+    Colors.cyanAccent.shade100,
+    Colors.deepOrangeAccent.shade100,
+    Colors.deepPurpleAccent.shade100,
+    Colors.greenAccent.shade100,
+    Colors.indigoAccent.shade100,
+    Colors.limeAccent.shade100,
+    Colors.pinkAccent.shade100,
+    Colors.redAccent.shade100,
+    Colors.tealAccent.shade100,
+    Colors.yellowAccent.shade100,
   ];
 }

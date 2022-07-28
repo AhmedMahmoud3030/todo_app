@@ -16,6 +16,10 @@ class FavoriteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var items =
         cubit.tasks.where((element) => element.isFavorite == true).toList();
-    return TaskItem(cubit: cubit, items: items);
+
+    return TaskItem(
+      cubit: cubit,
+      items: items,
+    );
   }
 }

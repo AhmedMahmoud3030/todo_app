@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -102,10 +104,26 @@ class HomeView extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(AppPadding.p12),
-                  child: SizedBox(
-                    width: double.infinity,
+                Container(
+                  padding: EdgeInsets.all(12),
+                  width: double.infinity,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        cubit.colors[Random().nextInt(100)],
+                        cubit.colors[Random().nextInt(100)],
+                        cubit.colors[Random().nextInt(100)],
+
+                        //add more colors
+                      ]),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Color.fromRGBO(
+                                0, 0, 0, 0.57), //shadow for button
+                            blurRadius: 5) //blur radius of shadow
+                      ],
+                    ),
                     child: ElevatedButton(
                       onPressed: () async {
                         Navigator.pushNamed(context, Routes.addTaskRoute);

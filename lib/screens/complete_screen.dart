@@ -17,6 +17,9 @@ class CompleteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var items =
         cubit.tasks.where((element) => element.isCompleted == true).toList();
-    return TaskItem(cubit: cubit, items: items);
+    return TaskItem(
+      cubit: cubit,
+      items: items,
+    );
   }
 }

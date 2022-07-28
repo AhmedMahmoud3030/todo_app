@@ -17,7 +17,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => TaskCubit()..getTasks(),
+          create: (context) => TaskCubit()
+            ..getTasks()
+            ..getRandColor(),
         ),
       ],
       child: MaterialApp(

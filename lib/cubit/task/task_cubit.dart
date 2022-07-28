@@ -55,7 +55,7 @@ class TaskCubit extends Cubit<TaskState> {
     print('now${now}');
   }
 
-  void getTasksByDay(int index) {
+  void getTasksByDay({int index = 0}) {
     selectedDay = days[index];
     tasksByDays = [];
     tasksByDays = tasks
@@ -143,7 +143,7 @@ class TaskCubit extends Cubit<TaskState> {
         now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
   }
 
-  void addData() async {
+  addData() async {
     emit(CreateTaskLoadingState());
 
     TaskModel model = TaskModel(
@@ -222,8 +222,7 @@ class TaskCubit extends Cubit<TaskState> {
                 : ato.Frequency.monthly,
       ),
       iosParams: ato.IOSParams(reminder: Duration(minutes: reminded)),
-      androidParams:
-          ato.AndroidParams(emailInvites: ['ahmed.elbeah@icloud.com']),
+      androidParams: ato.AndroidParams(),
       title: title,
       description: desc,
       location: loc,
@@ -286,8 +285,11 @@ class TaskCubit extends Cubit<TaskState> {
     emit(IsFavoriteRefreshState());
   }
 
-  Color getRandColor() {
-    return (ColorManger.taskColors..shuffle()).first;
+  void getRandColor() {
+    for (var i = 0; i < 100; i++) {
+      colors.insert(i, (ColorManger.taskColors..shuffle()).first);
+    }
+    emit(IsFavoriteRefreshState());
   }
 }
 
