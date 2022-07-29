@@ -1,13 +1,12 @@
-import 'dart:math';
+// ignore_for_file: avoid_print
 
 import 'package:add_2_calendar/add_2_calendar.dart' as ato;
-import 'package:alarm_calendar/alarm_calendar_plugin.dart';
 import 'package:device_calendar/device_calendar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:intl/intl.dart';
-import 'package:meta/meta.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/shared/network/sql_helper.dart';
@@ -15,6 +14,7 @@ import 'package:todo_app/utils/unique_id.dart';
 
 import '../../models/eventModel.dart';
 import '../../resources/color_manager.dart';
+import '../../shared/local/cache_helper.dart';
 
 part 'task_state.dart';
 
@@ -34,12 +34,29 @@ class TaskCubit extends Cubit<TaskState> {
   DateTime firstDayOfWeek = DateTime(2022);
   DateTime selectedDay = DateTime(2022);
   DateTime now = DateTime.now();
+  DeviceCalendarPlugin deviceCalendarPlugin = DeviceCalendarPlugin();
+  bool darkModeSelected = false;
   List<DateTime> days = [];
   List<TaskModel> tasks = [];
   List<TaskModel> tasksByDays = [];
-  DeviceCalendarPlugin deviceCalendarPlugin = DeviceCalendarPlugin();
-
   List<Color> colors = [];
+
+  void changeAppMode({bool? fromShared}) {
+    if (fromShared != null) {
+      darkModeSelected = fromShared;
+
+      CacheHelper.saveData(key: 'darkModeSelected', value: darkModeSelected)
+          .then((value) {
+        emit(AppChangeThemeState());
+      });
+    } else {
+      darkModeSelected = !darkModeSelected;
+      CacheHelper.saveData(key: 'darkModeSelected', value: darkModeSelected)
+          .then((value) {
+        emit(AppChangeThemeState());
+      });
+    }
+  }
 
   void generateDays() async {
     int currentDay = now.weekday;
@@ -50,9 +67,15 @@ class TaskCubit extends Cubit<TaskState> {
       days.insert(i, firstDayOfWeek.add(Duration(days: i, seconds: i)));
     }
 
-    print('firstDayOfWeek${firstDayOfWeek}');
-    print('selectedDay${selectedDay}');
-    print('now${now}');
+    if (kDebugMode) {
+      print('firstDayOfWeek$firstDayOfWeek');
+    }
+    if (kDebugMode) {
+      print('selectedDay$selectedDay');
+    }
+    if (kDebugMode) {
+      print('now$now');
+    }
   }
 
   void getTasksByDay({int index = 0}) {
@@ -77,37 +100,37 @@ class TaskCubit extends Cubit<TaskState> {
   Future<tz.TZDateTime> getTZTimeFromString(String date) async {
     var locString = await FlutterNativeTimezone.getLocalTimezone();
     var dateTime = DateFormat.yMd().parse(date).toLocal();
-    dateTime.add(Duration(days: 3));
+    dateTime.add(const Duration(days: 3));
     tz.Location location = tz.getLocation(locString);
     tz.setLocalLocation(location);
     var time = tz.TZDateTime.parse(location, dateTime.toString());
     return time;
   }
 
-  Future<List<Calendar>> loadCalendars() async {
-    //Added for visual purposes
-    await Future.delayed(const Duration(seconds: 1));
-    // Retrieve user's calendars from mobile device
-    // Request permissions first if they haven't been granted
-    var _calendars;
-    try {
-      var arePermissionsGranted = await deviceCalendarPlugin.hasPermissions();
-      if (arePermissionsGranted.isSuccess && !arePermissionsGranted.data!) {
-        arePermissionsGranted = await deviceCalendarPlugin.requestPermissions();
-        if (!arePermissionsGranted.isSuccess || !arePermissionsGranted.data!) {
-          return List.empty();
-        }
-      }
-      final calendarsResult = await deviceCalendarPlugin.retrieveCalendars();
-      _calendars = calendarsResult.data;
-      if (_calendars.isEmpty) {
-        return List.empty();
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-    return _calendars;
-  }
+  // Future<List<Calendar>> loadCalendars() async {
+  //   //Added for visual purposes
+  //   await Future.delayed(const Duration(seconds: 1));
+  //   // Retrieve user's calendars from mobile device
+  //   // Request permissions first if they haven't been granted
+  //   UnmodifiableListView<Calendar>? calendars;
+  //   try {
+  //     var arePermissionsGranted = await deviceCalendarPlugin.hasPermissions();
+  //     if (arePermissionsGranted.isSuccess && !arePermissionsGranted.data!) {
+  //       arePermissionsGranted = await deviceCalendarPlugin.requestPermissions();
+  //       if (!arePermissionsGranted.isSuccess || !arePermissionsGranted.data!) {
+  //         return List.empty();
+  //       }
+  //     }
+  //     final calendarsResult = await deviceCalendarPlugin.retrieveCalendars();
+  //     calendars = calendarsResult.data;
+  //     if (calendars.isEmpty) {
+  //       return List.empty();
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  //   return calendars;
+  // }
 
   Future<void> addToCalendar(
       CalendarEventModel calendarEventModel, String selectedCalendarId) async {
@@ -115,7 +138,6 @@ class TaskCubit extends Cubit<TaskState> {
     //Added for visual purposes
     await Future.delayed(const Duration(seconds: 2));
 
-    final eventTime = DateTime.now();
     final eventToCreate = Event(
       selectedCalendarId,
       title: calendarEventModel.eventTitle,
@@ -138,7 +160,7 @@ class TaskCubit extends Cubit<TaskState> {
 
   DateTime getDateFromTimeString(String date) {
     var timeOfDay = TimeOfDay.fromDateTime(DateFormat.jm().parse(date));
-    final now = new DateTime.now();
+    final now = DateTime.now();
     return DateTime(
         now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
   }
@@ -222,7 +244,7 @@ class TaskCubit extends Cubit<TaskState> {
                 : ato.Frequency.monthly,
       ),
       iosParams: ato.IOSParams(reminder: Duration(minutes: reminded)),
-      androidParams: ato.AndroidParams(),
+      androidParams: const ato.AndroidParams(),
       title: title,
       description: desc,
       location: loc,
@@ -266,7 +288,9 @@ class TaskCubit extends Cubit<TaskState> {
     await SQLHelper.deleteTask(model.id!)
         .then((value) => emit(DeleteTasksSuccessState()))
         .catchError((err) {
-      print(err);
+      if (kDebugMode) {
+        print(err);
+      }
       emit(DeleteTaskErrorState(err));
     });
     //getTasks();

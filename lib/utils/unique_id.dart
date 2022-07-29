@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+
 class UniqueIds {
   String getCustomUniqueId() {
     const String pushChars =
@@ -15,7 +17,9 @@ class UniqueIds {
       now = (now / 64).floor();
     }
     if (now != 0) {
-      print("Id should be unique");
+      if (kDebugMode) {
+        print("Id should be unique");
+      }
     }
     String uniqueId = timeStampChars.join('');
     if (!duplicateTime) {

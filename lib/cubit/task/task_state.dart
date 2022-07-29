@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 part of 'task_cubit.dart';
 
 @immutable
@@ -45,3 +47,5 @@ class IsFavoriteRefreshState extends TaskState {}
 class ChangeDateRefreshState extends TaskState {}
 
 class AddToCalendarInProgress extends TaskState {}
+
+class AppChangeThemeState extends TaskState {}

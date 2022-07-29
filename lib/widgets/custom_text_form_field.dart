@@ -31,18 +31,14 @@ class CustomTextFormField extends StatelessWidget {
       validator: validator,
       keyboardType: textInputType,
       textAlignVertical: TextAlignVertical.center,
-      style: TextStyle(color: Colors.black),
+      style: Theme.of(context).textTheme.headlineSmall,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(AppPadding.p6),
         hintText: hint,
         suffixIcon: icon != null
             ? IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
                 icon: Icon(
-                  color: ColorManger.darkGrey,
+                  color: Theme.of(context).iconTheme.color,
+                  size: Theme.of(context).iconTheme.size,
                   icon,
                 ),
                 onPressed: onPressed,

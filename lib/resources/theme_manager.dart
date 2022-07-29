@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'color_manager.dart';
@@ -5,104 +7,114 @@ import 'font_manager.dart';
 import 'styles_manager.dart';
 import 'values_manager.dart';
 
-ThemeData getApplicationTheme() {
+ThemeData getApplicationLightTheme() {
+  return ThemeData();
+}
+
+ThemeData getApplicationDarkTheme() {
   return ThemeData(
+    iconTheme: IconThemeData(
+      color: ColorManger.white,
+      size: AppSize.s30,
+    ),
+    popupMenuTheme: PopupMenuThemeData(color: ColorManger.veryLightBlack),
+    snackBarTheme: SnackBarThemeData(
+        backgroundColor: ColorManger.taskColors[Random().nextInt(10)]),
+    indicatorColor: ColorManger.white,
     textSelectionTheme: TextSelectionThemeData(
-        cursorColor: ColorManger.black,
-        selectionColor: ColorManger.black,
-        selectionHandleColor: ColorManger.black //<-- SEE HERE
+        cursorColor: ColorManger.splash,
+        selectionColor: ColorManger.darkPrimary,
+        selectionHandleColor: ColorManger.darkPrimary //<-- SEE HERE
         ),
+    backgroundColor: ColorManger.lightBlack,
+    applyElevationOverlayColor: false,
+    scaffoldBackgroundColor: ColorManger.lightBlack,
     //?main colors
     primaryColor: ColorManger.primary,
     primaryColorLight: ColorManger.lightPrimary,
     primaryColorDark: ColorManger.darkPrimary,
-    disabledColor: ColorManger.grey1,
-    splashColor: ColorManger.lightPrimary,
+    disabledColor: ColorManger.lightGrey,
+    splashColor: ColorManger.splash,
     //ripple effect
 
     //?cardview theme
     cardTheme: CardTheme(
-      color: ColorManger.white,
+      color: ColorManger.lightBlack,
       shadowColor: ColorManger.grey,
       elevation: AppSize.s4,
     ),
     //?appBar theme
     appBarTheme: AppBarTheme(
       //centerTitle: true,
-      color: ColorManger.white,
+      color: ColorManger.lightBlack,
       elevation: AppSize.s0,
       shadowColor: ColorManger.lightPrimary,
       titleTextStyle: getSemiBoldStyle(
         fontSize: FontSize.s30,
-        color: ColorManger.black,
+        color: ColorManger.white,
       ),
     ),
-    buttonTheme: ButtonThemeData(
-      focusColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      disabledColor: Colors.transparent,
-      buttonColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-    ),
+
     //?elevated theme
     elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        textStyle: getRegularStyle(
-          color: ColorManger.white,
-          fontSize: FontSize.s18,
+      style: ButtonStyle(
+        textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+          (states) => getRegularStyle(
+            color: ColorManger.white,
+            fontSize: FontSize.s18,
+          ),
         ),
-        surfaceTintColor: Colors.transparent,
-        onPrimary: Colors.transparent,
-        elevation: 20,
-        primary: Colors.transparent,
-        onSurface: Colors.transparent,
-        shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSize.s10),
+        surfaceTintColor: MaterialStateProperty.resolveWith<Color>(
+          (states) => Colors.transparent,
         ),
+        elevation:
+            MaterialStateProperty.resolveWith<double>((states) => AppSize.s0),
+        shadowColor: MaterialStateProperty.resolveWith<Color>(
+          (states) => Colors.transparent,
+        ),
+        shape: MaterialStateProperty.resolveWith<OutlinedBorder>((states) =>
+            RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSize.s12))),
+        overlayColor: MaterialStateProperty.resolveWith<Color>(
+            (states) => Colors.transparent),
+        foregroundColor: MaterialStateProperty.resolveWith<Color>(
+            (states) => Colors.transparent),
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (states) => Colors.transparent),
       ),
     )
     //?text theme
     ,
     textTheme: TextTheme(
       headlineLarge: getSemiBoldStyle(
-        color: ColorManger.black,
+        color: ColorManger.white,
         fontSize: FontSize.s18,
       ),
       headlineMedium: getSemiBoldStyle(
         color: ColorManger.white,
         fontSize: FontSize.s18,
       ),
-      displayLarge: getRegularStyle(
-        color: ColorManger.white,
-        fontSize: FontSize.s18,
-      ),
       headlineSmall: getRegularStyle(
-        color: ColorManger.black,
+        color: ColorManger.white,
         fontSize: FontSize.s16,
       ),
       displaySmall: getRegularStyle(
-        color: ColorManger.darkGrey,
-        fontSize: FontSize.s18,
-      ),
-      displayMedium: getSemiBoldStyle(
         color: ColorManger.black,
-        fontSize: FontSize.s18,
+        fontSize: FontSize.s16,
       ),
     ),
 
     //?input decoration theme
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: ColorManger.lightGrey,
-      contentPadding: const EdgeInsets.all(AppPadding.p8),
+      fillColor: ColorManger.veryLightBlack,
+      contentPadding: const EdgeInsets.all(AppSize.s10),
       hintStyle: getRegularStyle(
-        color: ColorManger.darkGrey,
+        color: ColorManger.white,
         fontSize: FontSize.s14,
       ),
       labelStyle: getMediumStyle(
-        color: ColorManger.darkGrey,
+        color: ColorManger.white,
         fontSize: FontSize.s14,
       ),
       errorStyle: getRegularStyle(
@@ -133,7 +145,7 @@ ThemeData getApplicationTheme() {
       ),
       errorBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: ColorManger.error,
+          color: ColorManger.errorLight,
           width: AppSize.s1_5,
         ),
         borderRadius: const BorderRadius.all(
@@ -144,7 +156,7 @@ ThemeData getApplicationTheme() {
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: ColorManger.errorLight,
+          color: ColorManger.error,
           width: AppSize.s1_5,
         ),
         borderRadius: const BorderRadius.all(

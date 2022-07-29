@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,12 +21,9 @@ class AddTask extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     return BlocConsumer<TaskCubit, TaskState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         var cubit = TaskCubit.get(context);
-        FocusNode focusNode = FocusNode();
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -33,16 +31,16 @@ class AddTask extends StatelessWidget {
                 Navigator.pop(context);
               },
               icon: Icon(
-                size: AppSize.s20,
-                color: ColorManger.black,
+                color: Theme.of(context).iconTheme.color,
+                size: Theme.of(context).iconTheme.size,
                 Icons.arrow_back_ios_new,
               ),
             ),
             toolbarHeight: AppSize.s120,
-            title: Text(AppStrings.add_task),
+            title: const Text(AppStrings.add_task),
           ),
           body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.all(AppPadding.p8),
               child: Form(
@@ -54,13 +52,13 @@ class AddTask extends StatelessWidget {
                       AppStrings.title,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    SizedBox(height: AppPadding.p16),
+                    const SizedBox(height: AppMargin.m16),
                     CustomTextFormField(
                       textEditingController: cubit.title,
                       textInputType: TextInputType.text,
                       hint: AppStrings.add_new_feature,
                       validator: (String? s) {
-                        if (s!.isEmpty) return "Can'\t be empty";
+                        if (s!.isEmpty) return AppStrings.vald_error;
                         return null;
                       },
                       onSaved: (String? s) {
@@ -68,23 +66,22 @@ class AddTask extends StatelessWidget {
                       },
                       //onPressed: () {},
                     ),
-                    SizedBox(height: AppPadding.p32),
+                    const SizedBox(height: AppMargin.m32),
                     Text(
                       AppStrings.date,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    SizedBox(height: AppPadding.p16),
+                    const SizedBox(height: AppMargin.m16),
                     CustomTextFormField(
                       textEditingController: cubit.date,
                       onSaved: (s) {},
                       validator: (String? s) {
-                        if (s!.isEmpty) return "Can'\t be empty";
+                        if (s!.isEmpty) return AppStrings.vald_error;
                         return null;
                       },
-                      hint: '7/23/2022',
+                      hint: AppStrings.hint_date,
                       icon: Icons.keyboard_arrow_down_sharp,
                       onPressed: () {
-                        focusNode.unfocus();
                         showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
@@ -98,31 +95,30 @@ class AddTask extends StatelessWidget {
                         });
                       },
                     ),
-                    SizedBox(height: AppPadding.p32),
+                    const SizedBox(height: AppMargin.m32),
                     Row(
                       children: [
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Start time',
+                              Text(AppStrings.add_new_feature,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineSmall),
-                              SizedBox(height: AppPadding.p16),
+                              const SizedBox(height: AppMargin.m16),
                               GestureDetector(
-                                onTap: () {
-                                  focusNode.unfocus();
-                                },
+                                onTap: () {},
                                 child: CustomTextFormField(
                                   onSaved: (s) {},
                                   validator: (String? s) {
-                                    if (s!.isEmpty) return "Can'\t be empty";
+                                    if (s!.isEmpty)
+                                      return AppStrings.vald_error;
                                     return null;
                                   },
                                   textInputType: TextInputType.datetime,
                                   textEditingController: cubit.startTime,
-                                  hint: '11:00 AM',
+                                  hint: AppStrings.add_new_feature,
                                   icon: Icons.timelapse,
                                   onPressed: () {
                                     showTimePicker(
@@ -138,23 +134,27 @@ class AddTask extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(width: AppPadding.p16),
+                        const SizedBox(width: AppMargin.m16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('End time',
+                              Text(AppStrings.end_time,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineSmall),
-                              SizedBox(height: AppPadding.p16),
+                              const SizedBox(height: AppMargin.m16),
                               CustomTextFormField(
-                                hint: '12:00 PM',
+                                hint: AppStrings.hint_time,
                                 icon: Icons.timelapse,
                                 onPressed: () {
-                                  focusNode.unfocus();
                                   showTimePicker(
                                     context: context,
+                                    cancelText:
+                                        AppStrings.show_time_picker_cancel,
+                                    confirmText:
+                                        AppStrings.show_time_picker_confirm,
+                                    helpText: 'hehe',
                                     initialTime: TimeOfDay(
                                       hour: TimeOfDay.now().hour + 1,
                                       minute: TimeOfDay.now().minute,
@@ -166,7 +166,7 @@ class AddTask extends StatelessWidget {
                                 },
                                 onSaved: (String? s) {},
                                 validator: (String? s) {
-                                  if (s!.isEmpty) return "Can'\t be empty";
+                                  if (s!.isEmpty) return AppStrings.vald_error;
                                   return null;
                                 },
                                 textEditingController: cubit.endTime,
@@ -177,17 +177,19 @@ class AddTask extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(height: AppPadding.p32),
+                    const SizedBox(height: AppPadding.p32),
                     Text('Remind',
                         style: Theme.of(context).textTheme.headlineSmall),
-                    SizedBox(height: AppPadding.p16),
+                    const SizedBox(height: AppPadding.p16),
                     DropdownButtonFormField<dynamic>(
                       validator: (s) {
                         if (s!.isEmpty) return "Can'\t be empty";
                         return null;
                       },
                       onSaved: (newValue) {
-                        print(newValue);
+                        if (kDebugMode) {
+                          print(newValue);
+                        }
                       },
                       value: 'remind_2',
                       // hint: Text('choose the time you want us to remind you'),
@@ -196,40 +198,40 @@ class AddTask extends StatelessWidget {
                       style: const TextStyle(color: Colors.deepPurple),
                       items: <DropdownMenuItem>[
                         DropdownMenuItem(
+                            value: "remind_1",
                             child: Text(
                               '10 minute before',
                               style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                            value: "remind_1"),
+                            )),
                         DropdownMenuItem(
+                            value: "remind_2",
                             child: Text(
                               '30 minute before',
                               style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                            value: "remind_2"),
+                            )),
                         DropdownMenuItem(
+                            value: "remind_3",
                             child: Text(
                               '1 hour before',
                               style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                            value: "remind_3"),
+                            )),
                         DropdownMenuItem(
+                            value: "remind_4",
                             child: Text(
                               '1 day before',
                               style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                            value: "remind_4"),
+                            )),
                       ],
                       onChanged: (value) {
                         cubit.remind = value;
                       },
                     ),
-                    SizedBox(height: AppPadding.p32),
+                    const SizedBox(height: AppPadding.p32),
                     Text(
                       'Repeat',
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    SizedBox(height: AppPadding.p16),
+                    const SizedBox(height: AppPadding.p16),
                     DropdownButtonFormField<dynamic>(
                       validator: (s) {
                         if (s!.isEmpty) return "Can'\t be empty";
@@ -243,29 +245,29 @@ class AddTask extends StatelessWidget {
                       style: const TextStyle(color: Colors.deepPurple),
                       items: <DropdownMenuItem>[
                         DropdownMenuItem(
+                            value: "repeat_1",
                             child: Text(
                               'daily',
                               style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                            value: "repeat_1"),
+                            )),
                         DropdownMenuItem(
+                            value: "repeat_2",
                             child: Text(
                               'weekly',
                               style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                            value: "repeat_2"),
+                            )),
                         DropdownMenuItem(
+                            value: "repeat_3",
                             child: Text(
                               'monthly',
                               style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                            value: "repeat_3"),
+                            )),
                       ],
                       onChanged: (value) {
                         cubit.repeat = value;
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: AppSize.s18,
                     ),
                     Container(
@@ -283,10 +285,9 @@ class AddTask extends StatelessWidget {
                               ],
                             ),
                             borderRadius: BorderRadius.circular(12),
-                            boxShadow: <BoxShadow>[
+                            boxShadow: const <BoxShadow>[
                               BoxShadow(
-                                  color: Color.fromRGBO(
-                                      0, 0, 0, 0), //shadow for button
+                                  color: Color(0x00000000), //shadow for button
                                   blurRadius: 5) //blur radius of shadow
                             ],
                           ),
@@ -317,7 +318,7 @@ class AddTask extends StatelessWidget {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       backgroundColor: ColorManger.lightBlack,
-                                      duration: Duration(seconds: 1),
+                                      duration: const Duration(seconds: 1),
                                       content: Text(
                                         'Processing Data',
                                         style: Theme.of(context)
@@ -332,7 +333,7 @@ class AddTask extends StatelessWidget {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       backgroundColor: ColorManger.lightBlack,
-                                      duration: Duration(seconds: 1),
+                                      duration: const Duration(seconds: 1),
                                       content: Text(
                                         'Please Fill Task Details',
                                         style: Theme.of(context)

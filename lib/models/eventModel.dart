@@ -1,5 +1,6 @@
+// ignore_for_file: file_names
+
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 class CalendarEventModel extends Equatable {
   final String eventTitle;

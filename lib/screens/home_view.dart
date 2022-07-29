@@ -1,12 +1,8 @@
 import 'dart:math';
 
-import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:intl/intl.dart';
-import 'package:todo_app/models/eventModel.dart';
 import 'package:todo_app/resources/color_manager.dart';
 import 'package:todo_app/resources/routes_manager.dart';
 import 'package:todo_app/resources/strings_manager.dart';
@@ -15,22 +11,18 @@ import 'package:todo_app/screens/all_screen.dart';
 import 'package:todo_app/screens/complete_screen.dart';
 import 'package:todo_app/screens/favorite_screen.dart';
 import 'package:todo_app/screens/un_complete_screen.dart';
-import 'package:todo_app/utils/from_string_to_tzdatetime.dart';
 
 import '../cubit/task/task_cubit.dart';
-import '../shared/network/sql_helper.dart';
 
 class HomeView extends StatelessWidget {
-  HomeView({Key? key}) : super(key: key);
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     return BlocConsumer<TaskCubit, TaskState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         var cubit = TaskCubit.get(context);
 
@@ -43,49 +35,53 @@ class HomeView extends StatelessWidget {
               actions: [
                 IconButton(
                   onPressed: () async {
+                    Navigator.pushNamed(context, Routes.settingsRoute);
+                  },
+                  icon: Icon(Icons.settings),
+                ),
+                const SizedBox(
+                  width: AppMargin.m20,
+                ),
+                IconButton(
+                  onPressed: () async {
                     Navigator.pushNamed(context, Routes.scheduleRoute);
                   },
                   icon: Icon(
-                    color: ColorManger.black,
-                    size: AppSize.s30,
                     Icons.calendar_today,
                   ),
                 ),
-                SizedBox(
-                  width: 20,
+                const SizedBox(
+                  width: AppMargin.m20,
                 )
               ],
-              title: Text(
+              title: const Text(
                 AppStrings.board,
               ),
               bottom: TabBar(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 isScrollable: true,
-                indicatorColor: ColorManger.black,
                 //indicatorWeight: 2,
                 tabs: [
                   Tab(
                     child: Text(
-                      'All',
-                      style: Theme.of(context).textTheme.headlineLarge,
+                      AppStrings.all,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  ),
+                  Tab(
+                    child: Text(AppStrings.completed,
+                        style: Theme.of(context).textTheme.headlineMedium),
+                  ),
+                  Tab(
+                    child: Text(
+                      AppStrings.un_completed,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ),
                   Tab(
                     child: Text(
-                      'Completed',
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                  ),
-                  Tab(
-                    child: Text(
-                      'Uncompleted',
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                  ),
-                  Tab(
-                    child: Text(
-                      'Favorite',
-                      style: Theme.of(context).textTheme.headlineLarge,
+                      AppStrings.favorite,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ),
                 ],
@@ -95,7 +91,7 @@ class HomeView extends StatelessWidget {
               children: [
                 Expanded(
                   child: TabBarView(
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     children: [
                       AllScreen(cubit: cubit),
                       CompleteScreen(cubit: cubit),
@@ -105,48 +101,28 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(AppPadding.p12),
                   width: double.infinity,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(colors: [
-                        cubit.colors[Random().nextInt(100)],
-                        cubit.colors[Random().nextInt(100)],
-                        cubit.colors[Random().nextInt(100)],
+                        cubit.colors[AppSize.s10.toInt()],
+                        cubit.colors[AppSize.s10.toInt() + AppSize.s10.toInt()],
+                        cubit.colors[AppSize.s10.toInt() +
+                            AppSize.s10.toInt() +
+                            AppSize.s10.toInt()],
 
                         //add more colors
                       ]),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Color.fromRGBO(
-                                0, 0, 0, 0.57), //shadow for button
-                            blurRadius: 5) //blur radius of shadow
-                      ],
+                      borderRadius: BorderRadius.circular(AppSize.s12),
                     ),
                     child: ElevatedButton(
-                      style: ButtonStyle(
-                        overlayColor: MaterialStateProperty.resolveWith<Color>(
-                            (states) => Colors.transparent),
-                        surfaceTintColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                                (states) => Colors.transparent),
-                        shadowColor: MaterialStateProperty.resolveWith<Color>(
-                            (states) => Colors.transparent),
-                        foregroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                                (states) => Colors.transparent),
-                        elevation: MaterialStateProperty.resolveWith<double>(
-                            (states) => 0),
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                                (states) => Colors.transparent),
-                      ),
+                      style: Theme.of(context).elevatedButtonTheme.style,
                       onPressed: () async {
                         Navigator.pushNamed(context, Routes.addTaskRoute);
                       },
                       child: Text(
-                        'Add a Task',
+                        AppStrings.add_task,
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                     ),

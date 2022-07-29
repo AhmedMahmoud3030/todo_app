@@ -4,30 +4,45 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubit/task/task_cubit.dart';
 import 'resources/routes_manager.dart';
 import 'resources/theme_manager.dart';
+import 'shared/local/cache_helper.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await CacheHelper.init();
+  bool? darkModeSelected = CacheHelper.getData(key: 'darkModeSelected');
+  runApp(MyApp(
+    darkModeSelected: darkModeSelected,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  final bool? darkModeSelected;
+  const MyApp({Key? key, this.darkModeSelected}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => TaskCubit()
-            ..getTasks()
-            ..getRandColor(),
-        ),
+            create: (context) => TaskCubit()
+              ..getTasks()
+              ..getRandColor()
+            //..changeAppMode(fromShared: darkModeSelected),
+            ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: Routes.homeRoute,
-        theme: getApplicationTheme(),
-        darkTheme: getApplicationTheme(),
+      child: BlocConsumer<TaskCubit, TaskState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var cubit = TaskCubit.get(context);
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: RouteGenerator.getRoute,
+            initialRoute: Routes.homeRoute,
+            theme: getApplicationLightTheme(),
+            darkTheme: getApplicationDarkTheme(),
+            themeMode:
+                cubit.darkModeSelected ? ThemeMode.dark : ThemeMode.light,
+          );
+        },
       ),
     );
   }

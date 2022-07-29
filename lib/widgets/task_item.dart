@@ -33,24 +33,24 @@ class TaskItem extends StatelessWidget {
               condition: items.isNotEmpty,
               fallback: (context) => Center(
                 child: Text(
-                  'No Tasks Here',
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  AppStrings.no_task_here,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
               builder: (context) => ListView.builder(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onLongPress: () {
                       showMenu(
-                        elevation: 0,
+                        elevation: AppSize.s0,
                         context: context,
-                        position: new RelativeRect.fromLTRB(
-                            mediaQuery.size.width / 2 - 140,
-                            mediaQuery.size.height / 2,
-                            mediaQuery.size.width / 2 + 140,
-                            mediaQuery.size.height / 2),
+                        position: RelativeRect.fromLTRB(
+                            mediaQuery.size.width / AppSize.s2 - AppSize.s140,
+                            mediaQuery.size.height / AppSize.s2,
+                            mediaQuery.size.width / AppSize.s2 + AppSize.s140,
+                            mediaQuery.size.height / AppSize.s2),
                         items: [
                           PopupMenuItem(
                             onTap: () {
@@ -58,11 +58,10 @@ class TaskItem extends StatelessWidget {
                                     (value) => ScaffoldMessenger.of(context)
                                         .showSnackBar(
                                       SnackBar(
-                                        duration: Duration(seconds: 1),
-                                        backgroundColor: cubit.colors[index],
+                                        duration: const Duration(seconds: 1),
                                         content: Text(
                                             textAlign: TextAlign.center,
-                                            AppStrings.remove_task_forever,
+                                            AppStrings.removed_from_tasks,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineMedium),
@@ -70,21 +69,22 @@ class TaskItem extends StatelessWidget {
                                     ),
                                   );
                             },
-                            padding: EdgeInsets.all(AppPadding.p0),
+                            padding: const EdgeInsets.all(AppPadding.p0),
                             child: Row(
                               children: [
                                 Icon(
                                   Icons.delete,
-                                  size: AppSize.s30,
-                                  color: ColorManger.errorLight,
+                                  color: Theme.of(context).iconTheme.color,
+                                  size: Theme.of(context).iconTheme.size,
                                 ),
                                 SizedBox(
-                                  width: AppSize.s4,
+                                  width: AppMargin.m8,
                                 ),
                                 Text(
-                                  'Remove From Tasks',
-                                  style:
-                                      Theme.of(context).textTheme.displayMedium,
+                                  AppStrings.remove_from_tasks,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium,
                                 )
                               ],
                             ),
@@ -97,13 +97,12 @@ class TaskItem extends StatelessWidget {
                               (value) =>
                                   ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  backgroundColor: cubit.colors[index],
+                                  duration: const Duration(seconds: 1),
                                   content: Text(
                                       textAlign: TextAlign.center,
                                       items[index].isFavorite
-                                          ? AppStrings.add_task_favorite
-                                          : AppStrings.remove_task_favorite,
+                                          ? AppStrings.added_to_favorite
+                                          : AppStrings.removed_from_favorite,
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineMedium),
@@ -115,13 +114,12 @@ class TaskItem extends StatelessWidget {
                               (value) =>
                                   ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  backgroundColor: cubit.colors[index],
+                                  duration: const Duration(seconds: 1),
                                   content: Text(
                                       textAlign: TextAlign.center,
                                       items[index].isCompleted
-                                          ? AppStrings.check_task
-                                          : AppStrings.un_check_task,
+                                          ? AppStrings.checked_this_task
+                                          : AppStrings.un_checked_this_task,
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineMedium),
@@ -146,7 +144,8 @@ class TaskItem extends StatelessWidget {
                                           BorderRadius.circular(AppSize.s8)),
                                   child: Icon(
                                     Icons.check,
-                                    color: ColorManger.white,
+                                    color: Theme.of(context).iconTheme.color,
+                                    size: Theme.of(context).iconTheme.size,
                                   ),
                                 )
                               : Container(
@@ -160,13 +159,13 @@ class TaskItem extends StatelessWidget {
                                       borderRadius:
                                           BorderRadius.circular(AppSize.s8)),
                                 ),
-                          SizedBox(
+                          const SizedBox(
                             width: AppMargin.m12,
                           ),
                           FittedBox(
                             child: Text(
                               items[index].title!,
-                              style: Theme.of(context).textTheme.displaySmall,
+                              style: Theme.of(context).textTheme.headlineSmall,
                             ),
                           )
                         ],

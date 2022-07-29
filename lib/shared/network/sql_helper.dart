@@ -43,12 +43,20 @@ class SQLHelper {
       'isFavorite': model.isFavorite.toString(),
       'isCompleted': model.isCompleted.toString(),
     };
-    print('task in create');
-    print(model.isCompleted.toString());
-    print(model.isFavorite.toString());
+    if (kDebugMode) {
+      print('task in create');
+    }
+    if (kDebugMode) {
+      print(model.isCompleted.toString());
+    }
+    if (kDebugMode) {
+      print(model.isFavorite.toString());
+    }
     final id = await db.insert('tasks', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
-    print('task created');
+    if (kDebugMode) {
+      print('task created');
+    }
     return id;
   }
 
